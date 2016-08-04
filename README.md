@@ -17,7 +17,7 @@ Install dependencies with the command line tool `go get`
     go get golang.org/x/net/publicsuffix
 
 ## Installation
-Download this repository and move its contents to $GOPATH/InventoryClient.
+Download this repository and move its contents to $GOPATH/Orkiv/Inventory-go-client.
 Add this to imports : 
 ```
     "github.com/Orkiv/Inventory-go-client"
