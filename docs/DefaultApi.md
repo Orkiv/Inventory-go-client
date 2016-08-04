@@ -1,4 +1,4 @@
-# \DefaultApi
+# Inventory-go-client\DefaultApi
 
 All URIs are relative to *https://www.orkiv.com/i/api*
 
