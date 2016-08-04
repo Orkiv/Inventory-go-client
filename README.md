@@ -31,7 +31,7 @@ Add this to imports :
     package main
 
     import (
-    "InventoryClient"
+    "Orkiv/Inventory-go-client"
     "fmt")
     
         func main(){
