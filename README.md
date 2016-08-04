@@ -20,7 +20,7 @@ Install dependencies with the command line tool `go get`
 Download this repository and move its contents to $GOPATH/InventoryClient.
 Add this to imports : 
 ```
-    "Orkiv/Inventory-go-client"
+    "github.com/Orkiv/Inventory-go-client"
 ```
 ### Install using go get
 
@@ -31,7 +31,7 @@ Add this to imports :
     package main
 
     import (
-    "Orkiv/Inventory-go-client"
+    "github.com/Orkiv/Inventory-go-client"
     "fmt")
     
         func main(){
