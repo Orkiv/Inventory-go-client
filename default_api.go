@@ -23,8 +23,6 @@
 package InventoryClient
 
 import (
-	"strings"
-	"fmt"
 	"errors"
 	"net/url"
 	"os"
@@ -399,7 +397,7 @@ func (a DefaultApi) ItemAddbulkPost(items []ItemRequest) (*Response, *APIRespons
 
 	// verify the required parameter 'items' is set
 	if &items == nil {
-		return *new(Response), nil, errors.New("Missing required parameter 'items' when calling DefaultApi->ItemAddbulkPost")
+		return new(Response), nil, errors.New("Missing required parameter 'items' when calling DefaultApi->ItemAddbulkPost")
 	}
 
 	headerParams := make(map[string]string)
