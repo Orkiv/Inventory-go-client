@@ -1,4 +1,4 @@
-# Item
+# ItemRequest
 
 ## Properties
 Name | Type | Description | Notes
@@ -9,10 +9,7 @@ Name | Type | Description | Notes
 **Name** | **string** | Name of item | [optional] [default to null]
 **Ordprice** | **float32** | Integer value of price | [optional] [default to null]
 **Price** | **string** | String value of price | [optional] [default to null]
-**Variations** | [**[]Variation**](Variation.md) |  | [optional] [default to null]
 **Quantity** | **string** | Inventory quantity | [optional] [default to null]
-**Media** | **[]string** | Array of item media | [optional] [default to null]
-**Buy** | **string** | Link to checkout page of item | [optional] [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

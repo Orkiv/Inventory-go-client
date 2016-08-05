@@ -42,6 +42,8 @@ type Item struct {
 	// String value of price
 	Price string `json:"price,omitempty"`
 
+	Variations []Variation `json:"variations,omitempty"`
+
 	// Inventory quantity
 	Quantity string `json:"quantity,omitempty"`
 

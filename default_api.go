@@ -23,9 +23,13 @@
 package InventoryClient
 
 import (
+	"strings"
+	"fmt"
 	"errors"
 	"net/url"
-	"encoding/json"
+	"os"
+"io/ioutil"
+"encoding/json"
 )
 
 type DefaultApi struct {
@@ -180,7 +184,7 @@ func (a DefaultApi) CategoriesDelete(id string) (*Response, *APIResponse, error)
  * @param query Category to query against system
  * @return []Category
  */
-func (a DefaultApi) CategoriesPost(query Dictionary) ([]Category, *APIResponse, error) {
+func (a DefaultApi) CategoriesPost(query Category) ([]Category, *APIResponse, error) {
 
 	var httpMethod = "Post"
 	// create path and map variables
@@ -319,7 +323,7 @@ func (a DefaultApi) CategoriesPut(id string, category Category) (*Category, *API
  * @param item Item to create.
  * @return *Item
  */
-func (a DefaultApi) ItemAddPost(item Item) (*Item, *APIResponse, error) {
+func (a DefaultApi) ItemAddPost(item ItemRequest) (*Item, *APIResponse, error) {
 
 	var httpMethod = "Post"
 	// create path and map variables
@@ -387,7 +391,7 @@ func (a DefaultApi) ItemAddPost(item Item) (*Item, *APIResponse, error) {
  * @param items Items to create.
  * @return *Response
  */
-func (a DefaultApi) ItemAddbulkPost(items []Item) (*Response, *APIResponse, error) {
+func (a DefaultApi) ItemAddbulkPost(items []ItemRequest) (*Response, *APIResponse, error) {
 
 	var httpMethod = "Post"
 	// create path and map variables
@@ -395,7 +399,7 @@ func (a DefaultApi) ItemAddbulkPost(items []Item) (*Response, *APIResponse, erro
 
 	// verify the required parameter 'items' is set
 	if &items == nil {
-		return new(Response), nil, errors.New("Missing required parameter 'items' when calling DefaultApi->ItemAddbulkPost")
+		return *new(Response), nil, errors.New("Missing required parameter 'items' when calling DefaultApi->ItemAddbulkPost")
 	}
 
 	headerParams := make(map[string]string)
@@ -518,11 +522,220 @@ func (a DefaultApi) ItemDelete(id string) (*Response, *APIResponse, error) {
 /**
  * 
  *
+ * @param id Item ID to open.
+ * @return *Item
+ */
+func (a DefaultApi) ItemGet(id string) (*Item, *APIResponse, error) {
+
+	var httpMethod = "Get"
+	// create path and map variables
+	path := a.Configuration.BasePath + "/item/"
+
+	// verify the required parameter 'id' is set
+	if &id == nil {
+		return new(Item), nil, errors.New("Missing required parameter 'id' when calling DefaultApi->ItemGet")
+	}
+
+	headerParams := make(map[string]string)
+	queryParams := url.Values{}
+	formParams := make(map[string]string)
+	var postBody interface{}
+	var fileName string
+	var fileBytes []byte
+	// authentication (APIKey) required
+
+	// set key with prefix in header
+	headerParams["APIKey"] = a.Configuration.GetAPIKeyWithPrefix("APIKey")
+	// authentication (AccountID) required
+
+	// set key with prefix in header
+	headerParams["accountid"] = a.Configuration.GetAPIKeyWithPrefix("accountid")
+
+	// add default headers if any
+	for key := range a.Configuration.DefaultHeader {
+		headerParams[key] = a.Configuration.DefaultHeader[key]
+	}
+		queryParams.Add("id", a.Configuration.APIClient.ParameterToString(id, ""))
+	
+
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{  }
+
+	// set Content-Type header
+	localVarHttpContentType := a.Configuration.APIClient.SelectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		headerParams["Content-Type"] = localVarHttpContentType
+	}
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+	}
+
+	// set Accept header
+	localVarHttpHeaderAccept := a.Configuration.APIClient.SelectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		headerParams["Accept"] = localVarHttpHeaderAccept
+	}
+	var successPayload = new(Item)
+	httpResponse, err := a.Configuration.APIClient.CallAPI(path, httpMethod, postBody, headerParams, queryParams, formParams, fileName, fileBytes)
+	if err != nil {
+		return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+	}
+	err = json.Unmarshal(httpResponse.Body(), &successPayload)
+	return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+}
+
+/**
+ * 
+ *
+ * @param imageurl URL of image to remove
+ * @return *Response
+ */
+func (a DefaultApi) ItemMediaDelete(imageurl string) (*Response, *APIResponse, error) {
+
+	var httpMethod = "Delete"
+	// create path and map variables
+	path := a.Configuration.BasePath + "/item-media/"
+
+	// verify the required parameter 'imageurl' is set
+	if &imageurl == nil {
+		return new(Response), nil, errors.New("Missing required parameter 'imageurl' when calling DefaultApi->ItemMediaDelete")
+	}
+
+	headerParams := make(map[string]string)
+	queryParams := url.Values{}
+	formParams := make(map[string]string)
+	var postBody interface{}
+	var fileName string
+	var fileBytes []byte
+	// authentication (APIKey) required
+
+	// set key with prefix in header
+	headerParams["APIKey"] = a.Configuration.GetAPIKeyWithPrefix("APIKey")
+	// authentication (AccountID) required
+
+	// set key with prefix in header
+	headerParams["accountid"] = a.Configuration.GetAPIKeyWithPrefix("accountid")
+
+	// add default headers if any
+	for key := range a.Configuration.DefaultHeader {
+		headerParams[key] = a.Configuration.DefaultHeader[key]
+	}
+		queryParams.Add("imageurl", a.Configuration.APIClient.ParameterToString(imageurl, ""))
+	
+
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{  }
+
+	// set Content-Type header
+	localVarHttpContentType := a.Configuration.APIClient.SelectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		headerParams["Content-Type"] = localVarHttpContentType
+	}
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+	}
+
+	// set Accept header
+	localVarHttpHeaderAccept := a.Configuration.APIClient.SelectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		headerParams["Accept"] = localVarHttpHeaderAccept
+	}
+	var successPayload = new(Response)
+	httpResponse, err := a.Configuration.APIClient.CallAPI(path, httpMethod, postBody, headerParams, queryParams, formParams, fileName, fileBytes)
+	if err != nil {
+		return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+	}
+	err = json.Unmarshal(httpResponse.Body(), &successPayload)
+	return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+}
+
+/**
+ * 
+ * This endpoint is currently in testing.
+ *
+ * @param id Valid item id to bind image to.
+ * @param image Image.
+ * @return *string
+ */
+func (a DefaultApi) ItemMediaPost(id string, image *os.File) (*string, *APIResponse, error) {
+
+	var httpMethod = "Post"
+	// create path and map variables
+	path := a.Configuration.BasePath + "/item-media/"
+
+	// verify the required parameter 'id' is set
+	if &id == nil {
+		return new(string), nil, errors.New("Missing required parameter 'id' when calling DefaultApi->ItemMediaPost")
+	}
+	// verify the required parameter 'image' is set
+	if &image == nil {
+		return new(string), nil, errors.New("Missing required parameter 'image' when calling DefaultApi->ItemMediaPost")
+	}
+
+	headerParams := make(map[string]string)
+	queryParams := url.Values{}
+	formParams := make(map[string]string)
+	var postBody interface{}
+	var fileName string
+	var fileBytes []byte
+	// authentication (APIKey) required
+
+	// set key with prefix in header
+	headerParams["APIKey"] = a.Configuration.GetAPIKeyWithPrefix("APIKey")
+	// authentication (AccountID) required
+
+	// set key with prefix in header
+	headerParams["accountid"] = a.Configuration.GetAPIKeyWithPrefix("accountid")
+
+	// add default headers if any
+	for key := range a.Configuration.DefaultHeader {
+		headerParams[key] = a.Configuration.DefaultHeader[key]
+	}
+		queryParams.Add("id", a.Configuration.APIClient.ParameterToString(id, ""))
+	
+
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{ "multipart/form-data", "application/x-www-form-urlencoded",  }
+
+	// set Content-Type header
+	localVarHttpContentType := a.Configuration.APIClient.SelectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		headerParams["Content-Type"] = localVarHttpContentType
+	}
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+	}
+
+	// set Accept header
+	localVarHttpHeaderAccept := a.Configuration.APIClient.SelectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		headerParams["Accept"] = localVarHttpHeaderAccept
+	}
+
+	fbs, _ := ioutil.ReadAll(file)
+	fileBytes = fbs
+	fileName = file.Name()
+
+	var successPayload = new(string)
+	httpResponse, err := a.Configuration.APIClient.CallAPI(path, httpMethod, postBody, headerParams, queryParams, formParams, fileName, fileBytes)
+	if err != nil {
+		return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+	}
+	err = json.Unmarshal(httpResponse.Body(), &successPayload)
+	return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+}
+
+/**
+ * 
+ *
  * @param id item id to update.
  * @param item New item information.
  * @return *Response
  */
-func (a DefaultApi) ItemPut(id string, item Dictionary) (*Response, *APIResponse, error) {
+func (a DefaultApi) ItemPut(id string, item ItemRequest) (*Response, *APIResponse, error) {
 
 	var httpMethod = "Put"
 	// create path and map variables
@@ -592,10 +805,12 @@ func (a DefaultApi) ItemPut(id string, item Dictionary) (*Response, *APIResponse
 /**
  * 
  *
+ * @param minprice Min price of items to find
+ * @param maxprice Max price of items to find
  * @param query Item to query against system.
  * @return *float32
  */
-func (a DefaultApi) ItemsCountPost(query Dictionary) (*float32, *APIResponse, error) {
+func (a DefaultApi) ItemsCountPost(minprice float32, maxprice float32, query ItemRequest) (*float32, *APIResponse, error) {
 
 	var httpMethod = "Post"
 	// create path and map variables
@@ -621,7 +836,9 @@ func (a DefaultApi) ItemsCountPost(query Dictionary) (*float32, *APIResponse, er
 	for key := range a.Configuration.DefaultHeader {
 		headerParams[key] = a.Configuration.DefaultHeader[key]
 	}
-
+		queryParams.Add("minprice", a.Configuration.APIClient.ParameterToString(minprice, ""))
+			queryParams.Add("maxprice", a.Configuration.APIClient.ParameterToString(maxprice, ""))
+	
 
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{  }
@@ -656,10 +873,12 @@ func (a DefaultApi) ItemsCountPost(query Dictionary) (*float32, *APIResponse, er
 /**
  * 
  *
+ * @param minprice Min price of items to find
+ * @param maxprice Max price of items to find
  * @param query Item to query against system.
  * @return []Item
  */
-func (a DefaultApi) ItemsPost(query Dictionary) ([]Item, *APIResponse, error) {
+func (a DefaultApi) ItemsPost(minprice float32, maxprice float32, query ItemRequest) ([]Item, *APIResponse, error) {
 
 	var httpMethod = "Post"
 	// create path and map variables
@@ -685,7 +904,9 @@ func (a DefaultApi) ItemsPost(query Dictionary) ([]Item, *APIResponse, error) {
 	for key := range a.Configuration.DefaultHeader {
 		headerParams[key] = a.Configuration.DefaultHeader[key]
 	}
-
+		queryParams.Add("minprice", a.Configuration.APIClient.ParameterToString(minprice, ""))
+			queryParams.Add("maxprice", a.Configuration.APIClient.ParameterToString(maxprice, ""))
+	
 
 	// to determine the Content-Type header
 	localVarHttpContentTypes := []string{  }
@@ -720,74 +941,10 @@ func (a DefaultApi) ItemsPost(query Dictionary) ([]Item, *APIResponse, error) {
 /**
  * 
  *
- * @param query Item to query against system.
- * @return []Dictionary
- */
-func (a DefaultApi) ItemsallfieldsPost(query Dictionary) ([]Dictionary, *APIResponse, error) {
-
-	var httpMethod = "Post"
-	// create path and map variables
-	path := a.Configuration.BasePath + "/items/?allfields"
-
-
-	headerParams := make(map[string]string)
-	queryParams := url.Values{}
-	formParams := make(map[string]string)
-	var postBody interface{}
-	var fileName string
-	var fileBytes []byte
-	// authentication (APIKey) required
-
-	// set key with prefix in header
-	headerParams["APIKey"] = a.Configuration.GetAPIKeyWithPrefix("APIKey")
-	// authentication (AccountID) required
-
-	// set key with prefix in header
-	headerParams["accountid"] = a.Configuration.GetAPIKeyWithPrefix("accountid")
-
-	// add default headers if any
-	for key := range a.Configuration.DefaultHeader {
-		headerParams[key] = a.Configuration.DefaultHeader[key]
-	}
-
-
-	// to determine the Content-Type header
-	localVarHttpContentTypes := []string{  }
-
-	// set Content-Type header
-	localVarHttpContentType := a.Configuration.APIClient.SelectHeaderContentType(localVarHttpContentTypes)
-	if localVarHttpContentType != "" {
-		headerParams["Content-Type"] = localVarHttpContentType
-	}
-	// to determine the Accept header
-	localVarHttpHeaderAccepts := []string{
-		"application/json",
-	}
-
-	// set Accept header
-	localVarHttpHeaderAccept := a.Configuration.APIClient.SelectHeaderAccept(localVarHttpHeaderAccepts)
-	if localVarHttpHeaderAccept != "" {
-		headerParams["Accept"] = localVarHttpHeaderAccept
-	}
-	// body params
-	postBody = &query
-
-	var successPayload = new([]Dictionary)
-	httpResponse, err := a.Configuration.APIClient.CallAPI(path, httpMethod, postBody, headerParams, queryParams, formParams, fileName, fileBytes)
-	if err != nil {
-		return *successPayload, NewAPIResponse(httpResponse.RawResponse), err
-	}
-	err = json.Unmarshal(httpResponse.Body(), &successPayload)
-	return *successPayload, NewAPIResponse(httpResponse.RawResponse), err
-}
-
-/**
- * 
- *
- * @param query Order to query against system.
+ * @param query Order to query against item invoices.
  * @return []Order
  */
-func (a DefaultApi) OrdersPost(query Dictionary) ([]Order, *APIResponse, error) {
+func (a DefaultApi) OrdersPost(query OrderRequest) ([]Order, *APIResponse, error) {
 
 	var httpMethod = "Post"
 	// create path and map variables
@@ -848,16 +1005,80 @@ func (a DefaultApi) OrdersPost(query Dictionary) ([]Order, *APIResponse, error) 
 /**
  * 
  *
+ * @param query Order to query against service invoices.
+ * @return []Order
+ */
+func (a DefaultApi) OrdersServicesPost(query OrderRequest) ([]Order, *APIResponse, error) {
+
+	var httpMethod = "Post"
+	// create path and map variables
+	path := a.Configuration.BasePath + "/orders/services/"
+
+
+	headerParams := make(map[string]string)
+	queryParams := url.Values{}
+	formParams := make(map[string]string)
+	var postBody interface{}
+	var fileName string
+	var fileBytes []byte
+	// authentication (APIKey) required
+
+	// set key with prefix in header
+	headerParams["APIKey"] = a.Configuration.GetAPIKeyWithPrefix("APIKey")
+	// authentication (AccountID) required
+
+	// set key with prefix in header
+	headerParams["accountid"] = a.Configuration.GetAPIKeyWithPrefix("accountid")
+
+	// add default headers if any
+	for key := range a.Configuration.DefaultHeader {
+		headerParams[key] = a.Configuration.DefaultHeader[key]
+	}
+
+
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{  }
+
+	// set Content-Type header
+	localVarHttpContentType := a.Configuration.APIClient.SelectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		headerParams["Content-Type"] = localVarHttpContentType
+	}
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+	}
+
+	// set Accept header
+	localVarHttpHeaderAccept := a.Configuration.APIClient.SelectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		headerParams["Accept"] = localVarHttpHeaderAccept
+	}
+	// body params
+	postBody = &query
+
+	var successPayload = new([]Order)
+	httpResponse, err := a.Configuration.APIClient.CallAPI(path, httpMethod, postBody, headerParams, queryParams, formParams, fileName, fileBytes)
+	if err != nil {
+		return *successPayload, NewAPIResponse(httpResponse.RawResponse), err
+	}
+	err = json.Unmarshal(httpResponse.Body(), &successPayload)
+	return *successPayload, NewAPIResponse(httpResponse.RawResponse), err
+}
+
+/**
+ * 
+ *
  * @param page Current page index.
  * @param categoryid Get items under specified category id.
  * @param sort Comma delimited Sort string. ie ; +ordprice. Please use number based fields only
  * @param search Performs a regex pattern match against the items within your account
- * @param minprice Min price in hundreds.
- * @param maxprice Max price in hudreds.
+ * @param minprice Min price in hundreds (cents).
+ * @param maxprice Max price in hundreds (cents).
  * @param query Custom parameters to query against system.
  * @return []Item
  */
-func (a DefaultApi) QueryPost(page float32, categoryid string, sort string, search string, minprice float32, maxprice float32, query Dictionary) ([]Item, *APIResponse, error) {
+func (a DefaultApi) QueryPost(page float32, categoryid string, sort string, search string, minprice float32, maxprice float32, query ItemRequest) ([]Item, *APIResponse, error) {
 
 	var httpMethod = "Post"
 	// create path and map variables
@@ -913,82 +1134,6 @@ func (a DefaultApi) QueryPost(page float32, categoryid string, sort string, sear
 	postBody = &query
 
 	var successPayload = new([]Item)
-	httpResponse, err := a.Configuration.APIClient.CallAPI(path, httpMethod, postBody, headerParams, queryParams, formParams, fileName, fileBytes)
-	if err != nil {
-		return *successPayload, NewAPIResponse(httpResponse.RawResponse), err
-	}
-	err = json.Unmarshal(httpResponse.Body(), &successPayload)
-	return *successPayload, NewAPIResponse(httpResponse.RawResponse), err
-}
-
-/**
- * 
- *
- * @param page Current page index.
- * @param categoryid Get items under specified category id.
- * @param sort Comma delimited Sort string. ie ; +ordprice. Please use number based fields only
- * @param search Performs a regex pattern match against the items within your account
- * @param minprice Min price in hundreds.
- * @param maxprice Max price in hudreds.
- * @param query Custom parameters to query against system.
- * @return []Dictionary
- */
-func (a DefaultApi) QueryallfieldsPost(page float32, categoryid string, sort string, search string, minprice float32, maxprice float32, query Dictionary) ([]Dictionary, *APIResponse, error) {
-
-	var httpMethod = "Post"
-	// create path and map variables
-	path := a.Configuration.BasePath + "/query/?allfields"
-
-
-	headerParams := make(map[string]string)
-	queryParams := url.Values{}
-	formParams := make(map[string]string)
-	var postBody interface{}
-	var fileName string
-	var fileBytes []byte
-	// authentication (APIKey) required
-
-	// set key with prefix in header
-	headerParams["APIKey"] = a.Configuration.GetAPIKeyWithPrefix("APIKey")
-	// authentication (AccountID) required
-
-	// set key with prefix in header
-	headerParams["accountid"] = a.Configuration.GetAPIKeyWithPrefix("accountid")
-
-	// add default headers if any
-	for key := range a.Configuration.DefaultHeader {
-		headerParams[key] = a.Configuration.DefaultHeader[key]
-	}
-		queryParams.Add("page", a.Configuration.APIClient.ParameterToString(page, ""))
-			queryParams.Add("categoryid", a.Configuration.APIClient.ParameterToString(categoryid, ""))
-			queryParams.Add("sort", a.Configuration.APIClient.ParameterToString(sort, ""))
-			queryParams.Add("search", a.Configuration.APIClient.ParameterToString(search, ""))
-			queryParams.Add("minprice", a.Configuration.APIClient.ParameterToString(minprice, ""))
-			queryParams.Add("maxprice", a.Configuration.APIClient.ParameterToString(maxprice, ""))
-	
-
-	// to determine the Content-Type header
-	localVarHttpContentTypes := []string{  }
-
-	// set Content-Type header
-	localVarHttpContentType := a.Configuration.APIClient.SelectHeaderContentType(localVarHttpContentTypes)
-	if localVarHttpContentType != "" {
-		headerParams["Content-Type"] = localVarHttpContentType
-	}
-	// to determine the Accept header
-	localVarHttpHeaderAccepts := []string{
-		"application/json",
-	}
-
-	// set Accept header
-	localVarHttpHeaderAccept := a.Configuration.APIClient.SelectHeaderAccept(localVarHttpHeaderAccepts)
-	if localVarHttpHeaderAccept != "" {
-		headerParams["Accept"] = localVarHttpHeaderAccept
-	}
-	// body params
-	postBody = &query
-
-	var successPayload = new([]Dictionary)
 	httpResponse, err := a.Configuration.APIClient.CallAPI(path, httpMethod, postBody, headerParams, queryParams, formParams, fileName, fileBytes)
 	if err != nil {
 		return *successPayload, NewAPIResponse(httpResponse.RawResponse), err
@@ -1126,10 +1271,76 @@ func (a DefaultApi) ServicesGet() ([]Service, *APIResponse, error) {
 /**
  * 
  *
+ * @param id ID of service to open
+ * @return *Service
+ */
+func (a DefaultApi) ServicesOpenGet(id string) (*Service, *APIResponse, error) {
+
+	var httpMethod = "Get"
+	// create path and map variables
+	path := a.Configuration.BasePath + "/services/open/"
+
+	// verify the required parameter 'id' is set
+	if &id == nil {
+		return new(Service), nil, errors.New("Missing required parameter 'id' when calling DefaultApi->ServicesOpenGet")
+	}
+
+	headerParams := make(map[string]string)
+	queryParams := url.Values{}
+	formParams := make(map[string]string)
+	var postBody interface{}
+	var fileName string
+	var fileBytes []byte
+	// authentication (APIKey) required
+
+	// set key with prefix in header
+	headerParams["APIKey"] = a.Configuration.GetAPIKeyWithPrefix("APIKey")
+	// authentication (AccountID) required
+
+	// set key with prefix in header
+	headerParams["accountid"] = a.Configuration.GetAPIKeyWithPrefix("accountid")
+
+	// add default headers if any
+	for key := range a.Configuration.DefaultHeader {
+		headerParams[key] = a.Configuration.DefaultHeader[key]
+	}
+		queryParams.Add("id", a.Configuration.APIClient.ParameterToString(id, ""))
+	
+
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{  }
+
+	// set Content-Type header
+	localVarHttpContentType := a.Configuration.APIClient.SelectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		headerParams["Content-Type"] = localVarHttpContentType
+	}
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+	}
+
+	// set Accept header
+	localVarHttpHeaderAccept := a.Configuration.APIClient.SelectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		headerParams["Accept"] = localVarHttpHeaderAccept
+	}
+	var successPayload = new(Service)
+	httpResponse, err := a.Configuration.APIClient.CallAPI(path, httpMethod, postBody, headerParams, queryParams, formParams, fileName, fileBytes)
+	if err != nil {
+		return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+	}
+	err = json.Unmarshal(httpResponse.Body(), &successPayload)
+	return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+}
+
+/**
+ * 
+ *
  * @param service Service to create.
  * @return *Service
  */
-func (a DefaultApi) ServicesPost(service Service) (*Service, *APIResponse, error) {
+func (a DefaultApi) ServicesPost(service ServiceRequest) (*Service, *APIResponse, error) {
 
 	var httpMethod = "Post"
 	// create path and map variables
@@ -1198,7 +1409,7 @@ func (a DefaultApi) ServicesPost(service Service) (*Service, *APIResponse, error
  * @param service New service data to set.
  * @return *Response
  */
-func (a DefaultApi) ServicesPut(id string, service Service) (*Response, *APIResponse, error) {
+func (a DefaultApi) ServicesPut(id string, service ServiceRequest) (*Response, *APIResponse, error) {
 
 	var httpMethod = "Put"
 	// create path and map variables
@@ -1255,6 +1466,286 @@ func (a DefaultApi) ServicesPut(id string, service Service) (*Response, *APIResp
 	}
 	// body params
 	postBody = &service
+
+	var successPayload = new(Response)
+	httpResponse, err := a.Configuration.APIClient.CallAPI(path, httpMethod, postBody, headerParams, queryParams, formParams, fileName, fileBytes)
+	if err != nil {
+		return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+	}
+	err = json.Unmarshal(httpResponse.Body(), &successPayload)
+	return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+}
+
+/**
+ * 
+ *
+ * @param id variation id to remove
+ * @return *Response
+ */
+func (a DefaultApi) VariationDelete(id string) (*Response, *APIResponse, error) {
+
+	var httpMethod = "Delete"
+	// create path and map variables
+	path := a.Configuration.BasePath + "/variation/"
+
+	// verify the required parameter 'id' is set
+	if &id == nil {
+		return new(Response), nil, errors.New("Missing required parameter 'id' when calling DefaultApi->VariationDelete")
+	}
+
+	headerParams := make(map[string]string)
+	queryParams := url.Values{}
+	formParams := make(map[string]string)
+	var postBody interface{}
+	var fileName string
+	var fileBytes []byte
+	// authentication (APIKey) required
+
+	// set key with prefix in header
+	headerParams["APIKey"] = a.Configuration.GetAPIKeyWithPrefix("APIKey")
+	// authentication (AccountID) required
+
+	// set key with prefix in header
+	headerParams["accountid"] = a.Configuration.GetAPIKeyWithPrefix("accountid")
+
+	// add default headers if any
+	for key := range a.Configuration.DefaultHeader {
+		headerParams[key] = a.Configuration.DefaultHeader[key]
+	}
+		queryParams.Add("id", a.Configuration.APIClient.ParameterToString(id, ""))
+	
+
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{  }
+
+	// set Content-Type header
+	localVarHttpContentType := a.Configuration.APIClient.SelectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		headerParams["Content-Type"] = localVarHttpContentType
+	}
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+	}
+
+	// set Accept header
+	localVarHttpHeaderAccept := a.Configuration.APIClient.SelectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		headerParams["Accept"] = localVarHttpHeaderAccept
+	}
+	var successPayload = new(Response)
+	httpResponse, err := a.Configuration.APIClient.CallAPI(path, httpMethod, postBody, headerParams, queryParams, formParams, fileName, fileBytes)
+	if err != nil {
+		return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+	}
+	err = json.Unmarshal(httpResponse.Body(), &successPayload)
+	return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+}
+
+/**
+ * 
+ *
+ * @param id Variation ID to open.
+ * @return *Variation
+ */
+func (a DefaultApi) VariationGet(id string) (*Variation, *APIResponse, error) {
+
+	var httpMethod = "Get"
+	// create path and map variables
+	path := a.Configuration.BasePath + "/variation/"
+
+	// verify the required parameter 'id' is set
+	if &id == nil {
+		return new(Variation), nil, errors.New("Missing required parameter 'id' when calling DefaultApi->VariationGet")
+	}
+
+	headerParams := make(map[string]string)
+	queryParams := url.Values{}
+	formParams := make(map[string]string)
+	var postBody interface{}
+	var fileName string
+	var fileBytes []byte
+	// authentication (APIKey) required
+
+	// set key with prefix in header
+	headerParams["APIKey"] = a.Configuration.GetAPIKeyWithPrefix("APIKey")
+	// authentication (AccountID) required
+
+	// set key with prefix in header
+	headerParams["accountid"] = a.Configuration.GetAPIKeyWithPrefix("accountid")
+
+	// add default headers if any
+	for key := range a.Configuration.DefaultHeader {
+		headerParams[key] = a.Configuration.DefaultHeader[key]
+	}
+		queryParams.Add("id", a.Configuration.APIClient.ParameterToString(id, ""))
+	
+
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{  }
+
+	// set Content-Type header
+	localVarHttpContentType := a.Configuration.APIClient.SelectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		headerParams["Content-Type"] = localVarHttpContentType
+	}
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+	}
+
+	// set Accept header
+	localVarHttpHeaderAccept := a.Configuration.APIClient.SelectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		headerParams["Accept"] = localVarHttpHeaderAccept
+	}
+	var successPayload = new(Variation)
+	httpResponse, err := a.Configuration.APIClient.CallAPI(path, httpMethod, postBody, headerParams, queryParams, formParams, fileName, fileBytes)
+	if err != nil {
+		return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+	}
+	err = json.Unmarshal(httpResponse.Body(), &successPayload)
+	return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+}
+
+/**
+ * 
+ *
+ * @param id Valid item id to bind variation to.
+ * @param item Variation information.
+ * @return *Response
+ */
+func (a DefaultApi) VariationPost(id string, item Variation) (*Response, *APIResponse, error) {
+
+	var httpMethod = "Post"
+	// create path and map variables
+	path := a.Configuration.BasePath + "/variation/"
+
+	// verify the required parameter 'id' is set
+	if &id == nil {
+		return new(Response), nil, errors.New("Missing required parameter 'id' when calling DefaultApi->VariationPost")
+	}
+	// verify the required parameter 'item' is set
+	if &item == nil {
+		return new(Response), nil, errors.New("Missing required parameter 'item' when calling DefaultApi->VariationPost")
+	}
+
+	headerParams := make(map[string]string)
+	queryParams := url.Values{}
+	formParams := make(map[string]string)
+	var postBody interface{}
+	var fileName string
+	var fileBytes []byte
+	// authentication (APIKey) required
+
+	// set key with prefix in header
+	headerParams["APIKey"] = a.Configuration.GetAPIKeyWithPrefix("APIKey")
+	// authentication (AccountID) required
+
+	// set key with prefix in header
+	headerParams["accountid"] = a.Configuration.GetAPIKeyWithPrefix("accountid")
+
+	// add default headers if any
+	for key := range a.Configuration.DefaultHeader {
+		headerParams[key] = a.Configuration.DefaultHeader[key]
+	}
+		queryParams.Add("id", a.Configuration.APIClient.ParameterToString(id, ""))
+	
+
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{  }
+
+	// set Content-Type header
+	localVarHttpContentType := a.Configuration.APIClient.SelectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		headerParams["Content-Type"] = localVarHttpContentType
+	}
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+	}
+
+	// set Accept header
+	localVarHttpHeaderAccept := a.Configuration.APIClient.SelectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		headerParams["Accept"] = localVarHttpHeaderAccept
+	}
+	// body params
+	postBody = &item
+
+	var successPayload = new(Response)
+	httpResponse, err := a.Configuration.APIClient.CallAPI(path, httpMethod, postBody, headerParams, queryParams, formParams, fileName, fileBytes)
+	if err != nil {
+		return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+	}
+	err = json.Unmarshal(httpResponse.Body(), &successPayload)
+	return successPayload, NewAPIResponse(httpResponse.RawResponse), err
+}
+
+/**
+ * 
+ *
+ * @param id variation id to update.
+ * @param item New variation information.
+ * @return *Response
+ */
+func (a DefaultApi) VariationPut(id string, item Variation) (*Response, *APIResponse, error) {
+
+	var httpMethod = "Put"
+	// create path and map variables
+	path := a.Configuration.BasePath + "/variation/"
+
+	// verify the required parameter 'id' is set
+	if &id == nil {
+		return new(Response), nil, errors.New("Missing required parameter 'id' when calling DefaultApi->VariationPut")
+	}
+	// verify the required parameter 'item' is set
+	if &item == nil {
+		return new(Response), nil, errors.New("Missing required parameter 'item' when calling DefaultApi->VariationPut")
+	}
+
+	headerParams := make(map[string]string)
+	queryParams := url.Values{}
+	formParams := make(map[string]string)
+	var postBody interface{}
+	var fileName string
+	var fileBytes []byte
+	// authentication (APIKey) required
+
+	// set key with prefix in header
+	headerParams["APIKey"] = a.Configuration.GetAPIKeyWithPrefix("APIKey")
+	// authentication (AccountID) required
+
+	// set key with prefix in header
+	headerParams["accountid"] = a.Configuration.GetAPIKeyWithPrefix("accountid")
+
+	// add default headers if any
+	for key := range a.Configuration.DefaultHeader {
+		headerParams[key] = a.Configuration.DefaultHeader[key]
+	}
+		queryParams.Add("id", a.Configuration.APIClient.ParameterToString(id, ""))
+	
+
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{  }
+
+	// set Content-Type header
+	localVarHttpContentType := a.Configuration.APIClient.SelectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		headerParams["Content-Type"] = localVarHttpContentType
+	}
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+	}
+
+	// set Accept header
+	localVarHttpHeaderAccept := a.Configuration.APIClient.SelectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		headerParams["Accept"] = localVarHttpHeaderAccept
+	}
+	// body params
+	postBody = &item
 
 	var successPayload = new(Response)
 	httpResponse, err := a.Configuration.APIClient.CallAPI(path, httpMethod, postBody, headerParams, queryParams, formParams, fileName, fileBytes)

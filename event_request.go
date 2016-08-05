@@ -30,5 +30,6 @@ type EventRequest struct {
 	// ServiceID to bind event to.
 	Serviceid string `json:"serviceid,omitempty"`
 
-	Postbody Dictionary `json:"postbody,omitempty"`
+	// Valid JSON of Key-value parameters to post to url
+	Postbody string `json:"postbody,omitempty"`
 }
